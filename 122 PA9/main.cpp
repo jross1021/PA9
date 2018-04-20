@@ -1,17 +1,15 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
+const int Width = 900;
+const int Height = 600;
+
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(900, 600), "SFML works!");
-	window.setFramerateLimit(60);
-	Texture t1, t2;
-	//system("dir");
-	t1.loadFromFile("free_space_galaxy_texture_by_lyshastra-d77gh2y.jpg");
-	Sprite sBackground(t1);
+	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
-	//change
 
 	while (window.isOpen())
 	{
@@ -23,11 +21,11 @@ int main()
 			//hello
 		}
 
+		//system("dir");
+
 		window.clear();
 		window.draw(shape);
-		window.draw(sBackground);
 		window.display();
 	}
-
 	return 0;
 }

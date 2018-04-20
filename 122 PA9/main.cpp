@@ -7,11 +7,11 @@ const int Height = 600;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(900, 600), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(1200, 900), "SFML works!");
 	window.setFramerateLimit(60);
 	Texture t1, t2;
 	//system("dir");
-	t1.loadFromFile("free_space_galaxy_texture_by_lyshastra-d77gh2y.jpg");
+	t1.loadFromFile("High Resolution Space Images-736288.jpg");
 	Sprite sBackground(t1);
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);

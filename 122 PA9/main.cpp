@@ -1,10 +1,24 @@
 #include <SFML/Graphics.hpp>
 
+const int Width = 900;
+const int Height = 600;
+
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	sf::RenderWindow window(sf::VideoMode(Width, Height), "SFML works!");
+	
+	
+	//Creating a texture for the spaceship using a jpeg file i found
+	sf::Texture t1;
+	t1.loadFromFile("Spaceship.jpg");
+		
+	//Creating a sprite for the ship
+	sf::Sprite ship(t1);
+
+	//This should just set the shape of the sprite for the ship and include the jpeg file to it
+	ship.setTextureRect((sf::IntRect(30, 0, 30, 30)));
+	ship.setOrigin(40, 40);
 
 	while (window.isOpen())
 	{
@@ -15,10 +29,11 @@ int main()
 				window.close();
 		}
 
+		//system("dir");
+
 		window.clear();
-		window.draw(shape);
+		window.draw(ship);
 		window.display();
 	}
-
 	return 0;
 }

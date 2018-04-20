@@ -11,6 +11,7 @@ int main()
 	Sprite sBackground(t1);
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
+	//change
 
 	while (window.isOpen())
 	{

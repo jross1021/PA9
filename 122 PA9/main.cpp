@@ -15,15 +15,15 @@ int main()
 	RenderWindow window(VideoMode(Width, Height), "SFML works!");	
 	window.setFramerateLimit(60);
 	//Creating a texture for the spaceship using a jpeg file i found
-	Texture t1;
-	t1.loadFromFile("anotherShip.png");
+	Texture shipTexture;
+	shipTexture.loadFromFile("anotherShip.png");
 	//Creating a sprite for the ship
-	sf::Sprite ship(t1);
+	sf::Sprite ship(shipTexture);
 
 	ship.setScale(targetSize.x / ship.getGlobalBounds().width, targetSize.y / ship.getGlobalBounds().height);
 	
 	//This should just set the shape of the sprite for the ship and include the png file to it
-	ship.setTexture(t1);
+	ship.setTexture(shipTexture);
 	ship.setPosition(Width / 2, Height / 2);
 	while (window.isOpen())
 	{

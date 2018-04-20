@@ -95,7 +95,7 @@ int main()
 		x += dx;
 		y += dy;
 
-		//if we're exeeding the bounds of our window
+		//if we leave the window
 		if (x > Width)
 		{
 			x = 0;

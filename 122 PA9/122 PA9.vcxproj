@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asteriods.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="main.cpp" />

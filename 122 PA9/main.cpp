@@ -20,21 +20,37 @@ int main()
 	window.setFramerateLimit(60);
 
 
-	Texture t1, shipTexture, asteroidTexture, asteroidTextureSmall;
+	Texture t1, shipTexture, asteroidTexture, asteroidTextureSmall, bulletTexture;
 	t1.loadFromFile("High Resolution Space Images-736288.jpg");
 	asteroidTexture.loadFromFile("rock.png");
 	asteroidTextureSmall.loadFromFile("rock_small.png");
 	shipTexture.loadFromFile("spaceship.png");
+	bulletTexture.loadFromFile("fire_red.png");
+
+
 	t1.setSmooth(true);
 	shipTexture.setSmooth(true);
 
 	Sprite sBackground(t1), asteroid(asteroidTexture);
 
+	/*
+	Animations and image sources for the animations were gathered from a tutorial linked 
+	at the bottom. The animation works by passing in the image saved as a texture.
+	The original image is saved as a long block of images. The parameters help to specify
+	the size of each individual image block within the whole block. The ObjectAnimation 
+	class then holds a vector of IntRects called frames, which holds each individual
+	image block as a frame. The ObjectAnimation class then updates the animation class
+	within its Update() function to cycle through the frames and display the proper frame,
+	essentially creating the animation.
+	*/
 
 	ObjectAnimation ship(shipTexture, 40, 0, 40, 40, 1, 0);
 	ObjectAnimation ship_go(shipTexture, 40, 40, 40, 40, 1, 0);
 	ObjectAnimation sRockSmall(asteroidTextureSmall, 0, 0, 64, 64, 16, 0.2);
 	ObjectAnimation sRock(asteroidTexture, 0, 0, 64, 64, 16, 0.2);
+
+	////Animation to use for the bullets////////////////
+	ObjectAnimation bulletAnim(bulletTexture, 0, 0, 32, 64, 16, 0.8);
 
 	sRock.sprite.setPosition(400, 400);
 	//A list of all the objects populating the game, including the spaceship
@@ -62,6 +78,24 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
+
+		/*
+		Here is where the bullets can be put in.
+		if (event.type == event::keypressed)
+			if(event.key.code == keyboard::whatever key we want here)
+			{
+				create the new bullet here. using a *bullet, passing in the
+				Playership x and Playership y for the x and y value for the
+				bullet constructor and Playership's angle for the angle value 
+				as well. The animation is the bulletAnim, and the last int value
+				that is passed in will be the size we want the bullets to be.
+
+				(bulletAnimation, playership x, playership y, playership angle, any int for size)
+
+
+				entities.push_back(bullet);
+			}
+		*/
 
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{

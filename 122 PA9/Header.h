@@ -86,3 +86,17 @@ public:
 	//Data Member
 	bool thrust;
 };
+
+class Bullet : public GameObject
+{
+public:
+
+	//still need constructor and Update() function
+
+
+
+	//withing Update() check if the x or y members of the bullet are 
+	//out of the bounds of the screen, if so set the life member of 
+	//the bullet to 0 and that should make them disappear once they leave
+	//the screen.
+};

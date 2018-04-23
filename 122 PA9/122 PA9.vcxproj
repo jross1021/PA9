@@ -148,7 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectAnimation.cpp" />
+    <ClCompile Include="Spaceship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h" />

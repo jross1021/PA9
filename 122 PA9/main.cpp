@@ -1,50 +1,57 @@
-#include <SFML/Graphics.hpp>
-
-const int Width = 1200;
-const int Height = 900;
-
-/////see ship movement section for source reference
-const float degToRadians = 0.017453f;
-/////////////////////////////////////////////////
+#include "Header.h"
 
 
-using namespace sf;
+
+/*Accepts two GameObjects (such as ship and asteroid, or asteroid and bullet) and uses the position of the 
+sprites for the objects to see if they have collided with one another. */
+bool IsCollided(GameObject *lhs, GameObject *rhs)
+{
+	return ((rhs->x - lhs->x) * (rhs->x - lhs->x) + (rhs->y - lhs->y) * (rhs->y - lhs->y) < (lhs->R + rhs->R) * (lhs->R + rhs->R));
+}
+
+
 
 int main()
 {
-	
+	srand(time(0));
+
 	////Background
-	sf::RenderWindow window(sf::VideoMode(Width, Height), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(Width, Height), "Asteroids!");
 	window.setFramerateLimit(60);
-	Texture t1;
+
+
+	Texture t1, shipTexture, asteroidTexture, asteroidTextureSmall;
 	t1.loadFromFile("High Resolution Space Images-736288.jpg");
-	Sprite sBackground(t1);
+	asteroidTexture.loadFromFile("rock.png");
+	asteroidTextureSmall.loadFromFile("rock_small.png");
+	shipTexture.loadFromFile("spaceship.png");
+	t1.setSmooth(true);
+	shipTexture.setSmooth(true);
 
-	///////Ship//////////////////////
-	//Creating a texture for the spaceship using a jpeg file i found
-	Texture shipTexture;
-	//resizing ship
-	Vector2f targetSize(50.0f, 50.0f);
-	shipTexture.loadFromFile("anotherShip.png");
-	//Creating a sprite for the ship
-	sf::Sprite ship(shipTexture);
-
-	ship.setScale(targetSize.x / ship.getGlobalBounds().width, targetSize.y / ship.getGlobalBounds().height);
-	
-	//This should just set the shape of the sprite for the ship and include the png file to it
-	ship.setTexture(shipTexture);
-	ship.setPosition(Width / 2, Height / 2);
+	Sprite sBackground(t1), asteroid(asteroidTexture);
 
 
-			//////////////////////Ship Movement//////////////////
-				////utilizing help from tutorial for angles https://www.youtube.com/watch?v=rWaSo2usU4A
+	ObjectAnimation ship(shipTexture, 40, 0, 40, 40, 1, 0);
+	ObjectAnimation ship_go(shipTexture, 40, 40, 40, 40, 1, 0);
+	ObjectAnimation sRockSmall(asteroidTextureSmall, 0, 0, 64, 64, 16, 0.2);
+	ObjectAnimation sRock(asteroidTexture, 0, 0, 64, 64, 16, 0.2);
 
-	float x = 300, y = 300;
-	float dx = 0, dy = 0, angle = 0;
-	bool thrust;
+	sRock.sprite.setPosition(400, 400);
+	//A list of all the objects populating the game, including the spaceship
+	std::list<GameObject*> objects;
 
-			//////////////////////////////////////////////////////////////////
+	for (int i = 0; i < 15; i++)
+	{
+		//randomly spawning and setting position of asteroids
+		Asteroid *a = new Asteroid();
+		a->settings(sRock, rand() % Width, rand() % Height, rand() % 360, 25);
+		objects.push_back(a);
+	}
 
+	//creating the player spaceship, adding to the objects list
+	Spaceship *Playership = new Spaceship;
+	Playership->settings(ship, 200, 200, 0, 20);
+	objects.push_back(Playership);
 
 	/////////////Game Loop
 	while (window.isOpen())
@@ -55,76 +62,199 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
+
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{
-			angle += 5;
+			Playership->angle += 3;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{
-			angle -= 5;
+			Playership->angle -= 3;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
-			thrust = true;
+			Playership->thrust = true;
 		}
 		else
 		{
-			thrust = false;
+			Playership->thrust = false;
 		}
 
-		if (thrust)
+		//checking for collisions
+		for (auto a : objects)
 		{
-			dx += cos(angle*degToRadians) *0.2;
-			dy += sin(angle*degToRadians) *0.2;
+			for (auto b : objects)
+			{
+				if (a->name == "asteroid" && b->name == "bullet")
+				{
+					if (IsCollided(a, b))
+					{
+						a->life = false;
+						b->life = false;
+
+						
+						for (int i = 0; i < 2; i++)
+						{
+							if (a->R == 15) continue;
+							GameObject *e = new Asteroid();
+							e->settings(sRockSmall, a->x, a->y, rand() % 360, 15);
+							objects.push_back(e);
+						}
+						
+					}
+				}
+
+				//checking asteroid and spaceship collision
+				if (a->name == "spaceship" && b->name == "asteroid")
+				{
+					if (IsCollided(a, b))
+					{
+						b->life = false;
+						//GameObject *o = new GameObject();
+						//o->settings()
+
+						Playership->settings(ship, Width / 2, Height / 2, 0, 20);
+						Playership->dx = 0; Playership->dy = 0;
+					}
+				}
+			}
+		}
+
+
+		//if the player is using up arrow
+		//do the animation
+		if (Playership->thrust)
+		{
+			Playership->anim = ship_go;
 		}
 		else
 		{
-			dx * 0.99;
-			dy * 0.99;
+			Playership->anim = ship;
 		}
 
-
-		int maxSpeed = 10;
-		float speed = sqrt(dx*dx + dy*dy);
-		if (speed > maxSpeed)
+		//randomly spawn asteroids during gameplay
+		if (rand() % 150 == 0)
 		{
-			dx *= maxSpeed / speed;
-			dy *= maxSpeed / speed;
+
+			Asteroid *a = new Asteroid();
+			a->settings(sRock, 0, rand() % Height, rand() % 360, 25);
+			objects.push_back(a);
 		}
 
-		x += dx;
-		y += dy;
-
-		//if we leave the window
-		if (x > Width)
+		//going through the list, and updating/displaying GameObjects to screen
+		for (auto i = objects.begin(); i != objects.end();)
 		{
-			x = 0;
-		}
-		if (x < 0)
-		{
-			x = Width;
-		}
-		if (y > Height)
-		{
-			y = 0;
-		}
-		if (y < 0)
+			GameObject *e = *i;
 
-		{
-			y = Height;
+			e->Update();
+			e->anim.Update();
+
+			//if the object has been destroyed/lost its life, remove the object
+			if (e->life == false) 
+			{ 
+				i = objects.erase(i);
+				delete e; 
+			}
+
+			//otherwise keep going through the list
+			else
+			{
+				i++;
+			}
 		}
 
-		ship.setPosition(x, y);
-		ship.setRotation(angle + 90);
+		sRock.Update();
 
-		window.clear();
+		////Display everything to the screen
+
 		window.draw(sBackground);
-		window.draw(ship);
+		//window.draw(sRock.sprite);
+		//displaying everyting in the objects list
+		for (auto i : objects)
+		{
+			i->draw(window);
+		}
+		
+
 		window.display();
 	}
 
-
-
-
 	return 0;
 }
+
+
+
+
+//		//////////////////////Ship Movement//////////////////
+//			////utilizing help from tutorial for angles https://www.youtube.com/watch?v=rWaSo2usU4A
+
+//float x = 300, y = 300;
+//float dx = 0, dy = 0, angle = 0;
+//bool thrust;
+
+//		//////////////////////////////////////////////////////////////////
+
+/////////Ship//////////////////////
+//
+////resizing ship
+//Vector2f targetSize(50.0f, 50.0f);
+//shipTexture.loadFromFile("anotherShip.png");
+////Creating a sprite for the ship
+//sf::Sprite ship(shipTexture);
+
+//ship.setScale(targetSize.x / ship.getGlobalBounds().width, targetSize.y / ship.getGlobalBounds().height);
+
+//This should just set the shape of the sprite for the ship and include the png file to it
+//ship.setTexture(shipTexture);
+//ship.setPosition(Width / 2, Height / 2);
+
+
+//if (Playership->thrust)
+//{
+//	Playership->dx += cos(Playership->angle*degToRadians) *0.2;
+//	Playership->dy += sin(Playership->angle*degToRadians) *0.2;
+//}
+//else
+//{
+//	dx * 0.99;
+//	dy * 0.99;
+//}
+
+
+//int maxSpeed = 10;
+//float speed = sqrt(dx*dx + dy*dy);
+//if (speed > maxSpeed)
+//{
+//	dx *= maxSpeed / speed;
+//	dy *= maxSpeed / speed;
+//}
+
+//x += dx;
+//y += dy;
+
+////if we leave the window
+//if (x > Width)
+//{
+//	x = 0;
+//}
+//if (x < 0)
+//{
+//	x = Width;
+//}
+//if (y > Height)
+//{
+//	y = 0;
+//}
+//if (y < 0)
+
+//{
+//	y = Height;
+//}
+
+/*	ship.setPosition(x, y);
+ship.setRotation(angle + 90);
+
+window.clear();
+window.draw(sBackground);
+window.draw(ship);
+window.display();*/

@@ -30,3 +30,7 @@ void Bullet::draw(RenderWindow & window)
 {
 	window.draw(bullet);
 }
+
+void Bullet::SetPos(Vector2f newPos) {
+	bullet.setPosition(newPos);
+}

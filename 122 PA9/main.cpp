@@ -1,4 +1,7 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "Bullets.h"
+#include "enemy.h"
 
 const int Width = 1200;
 const int Height = 900;
@@ -19,7 +22,12 @@ int main()
 	Texture t1;
 	t1.loadFromFile("High Resolution Space Images-736288.jpg");
 	Sprite sBackground(t1);
+	/*Creating the bullet*/ // taken from tutorial https://www.youtube.com/watch?v=2nI5ca-pXZI
+	vector<Bullet> bulletVec;
 
+	/*creating enemy*/ 
+	Enemy enemy(Vector2f(50, 50));
+	enemy.setPos(Vector2f(500, 50));
 	///////Ship//////////////////////
 	//Creating a texture for the spaceship using a jpeg file i found
 	Texture shipTexture;
@@ -113,13 +121,22 @@ int main()
 		{
 			y = Height;
 		}
+		bool fire = false;
+		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+			fire = true;
 
+		}
+		if (fire == true) {
+			Bullet newBullet(Vector2f(50, 5));
+
+		}
 		ship.setPosition(x, y);
 		ship.setRotation(angle + 90);
 
 		window.clear();
 		window.draw(sBackground);
 		window.draw(ship);
+		enemy.draw(window);
 		window.display();
 	}
 

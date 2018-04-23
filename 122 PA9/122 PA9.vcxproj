@@ -163,11 +163,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation.cpp" />
     <ClCompile Include="asteriods.cpp" />
     <ClCompile Include="bullets.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="spaceship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullets.h" />

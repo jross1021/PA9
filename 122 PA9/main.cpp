@@ -119,7 +119,7 @@ int main()
 		{
 			for (auto b : objects)
 			{
-				if (a->name == "asteroid" && b->name == "bullet")
+				/*if (a->name == "asteroid" && b->name == "bullet")
 				{
 					if (IsCollided(a, b))
 					{
@@ -136,7 +136,7 @@ int main()
 						}
 						
 					}
-				}
+				}*/
 
 				//checking asteroid and spaceship collision
 				if (a->name == "spaceship" && b->name == "asteroid")
@@ -202,7 +202,7 @@ int main()
 		////Display everything to the screen
 
 		window.draw(sBackground);
-		//window.draw(sRock.sprite);
+	
 		//displaying everyting in the objects list
 		for (auto i : objects)
 		{

@@ -3,7 +3,8 @@
 #include <vector>
 #include <time.h>
 #include <list>
-#include "Bullets.h"
+#include <SFML\Graphics.hpp>
+#include <iostream>
 
 const int Width = 1200;
 const int Height = 800;
@@ -85,6 +86,14 @@ public:
 
 	//Data Member
 	bool thrust;
+};
+
+class Bullet : public GameObject {
+public:
+	Bullet();
+
+	void  update();
+	bool bullThrust;
 };
 using namespace sf;
 using namespace std;

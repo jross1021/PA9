@@ -1,36 +1,23 @@
-#include "Bullets.h"
+#include "header.h"
 
-void Bullet::fire(int speed)
+Bullet::Bullet(){
+	name = "bullet";
+}
+
+void Bullet::update()
 {
-	bullet.move(speed, 0);
+	if (bullThrust == true) {
+		this->dx += cos(this->angle* degToRadians) *.2;
+		this->dy += sin(this->angle * degToRadians) *.2;
+		//angle+=rand()%6-3;
+	}
+	this->x += this->dx;
+	this->y += this->dy;
+	if (x > Width || x<0 || y>Height || y < 0) 
+	{
+		life = 0;
+	}
 }
 
-int Bullet::getRight()
-{
-	return bullet.getPosition().x; +bullet.getPosition().x;
-}
 
-int Bullet::getLeft()
-{
-	return bullet.getPosition().x;
-}
 
-int Bullet::getTop()
-{
-	return bullet.getPosition().y;
-}
-
-int Bullet::getBottom()
-{
-	return bullet.getPosition().y + bullet.getPosition().y;
-
-}
-
-void Bullet::draw(RenderWindow & window)
-{
-	window.draw(bullet);
-}
-
-void Bullet::SetPos(Vector2f newPos) {
-	bullet.setPosition(newPos);
-}

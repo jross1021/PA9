@@ -25,13 +25,14 @@ int main()
 	asteroidTexture.loadFromFile("rock.png");
 	asteroidTextureSmall.loadFromFile("rock_small.png");
 	shipTexture.loadFromFile("spaceship.png");
-	bulletTexture.loadFromFile("fire_red.png");
+	bulletTexture.loadFromFile("fire_blue.png");
 
 
 	t1.setSmooth(true);
 	shipTexture.setSmooth(true);
 
 	Sprite sBackground(t1), asteroid(asteroidTexture);
+
 
 	/*
 	Animations and image sources for the animations were gathered from a tutorial linked
@@ -68,7 +69,6 @@ int main()
 	Spaceship *Playership = new Spaceship;
 	Playership->settings(ship, 200, 200, 0, 20);
 	objects.push_back(Playership);
-
 	/////////////Game Loop
 	while (window.isOpen())
 	{
@@ -78,7 +78,15 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
-
+		//bool isFire = false;
+		if (Keyboard::isKeyPressed(Keyboard::Space))
+		{
+			Bullet *b = new Bullet();
+			//isFire = true;
+			b->settings(bulletAnim,Playership->x, Playership->y,Playership->angle, 10);
+			b->bullThrust = true;
+			objects.push_back(b);
+		}
 		/*
 		Here is where the bullets can be put in.
 		if (event.type == event::keypressed)
@@ -96,7 +104,6 @@ int main()
 		entities.push_back(bullet);
 		}
 		*/
-
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{
 			Playership->angle += 3;
@@ -113,7 +120,6 @@ int main()
 		{
 			Playership->thrust = false;
 		}
-
 		//checking for collisions
 		for (auto a : objects)
 		{
@@ -174,7 +180,6 @@ int main()
 			a->settings(sRock, 0, rand() % Height, rand() % 360, 25);
 			objects.push_back(a);
 		}
-
 		//going through the list, and updating/displaying GameObjects to screen
 		for (auto i = objects.begin(); i != objects.end();)
 		{
@@ -208,8 +213,6 @@ int main()
 		{
 			i->draw(window);
 		}
-
-
 		window.display();
 	}
 

@@ -84,7 +84,7 @@ int main()
 			Bullet *b = new Bullet();
 			//isFire = true;
 			b->settings(bulletAnim,Playership->x, Playership->y,Playership->angle, 10);
-			b->bullThrust = true;
+			//b->bullThrust = true;
 			objects.push_back(b);
 		}
 		/*

@@ -92,7 +92,7 @@ class Bullet : public GameObject {
 public:
 	Bullet();
 
-	void  update();
+	void  Update();
 	bool bullThrust;
 };
 using namespace sf;

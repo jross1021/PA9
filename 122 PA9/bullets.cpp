@@ -7,9 +7,9 @@ Bullet::Bullet(){
 void Bullet::update()
 {
 	if (bullThrust == true) {
-		this->dx += cos(this->angle* degToRadians) *.2;
-		this->dy += sin(this->angle * degToRadians) *.2;
-		//angle+=rand()%6-3;
+		this->dx += cos(this->angle* degToRadians) *15;
+		this->dy += sin(this->angle * degToRadians) *15;
+		angle+=rand()%6-3;
 	}
 	this->x += this->dx;
 	this->y += this->dy;
